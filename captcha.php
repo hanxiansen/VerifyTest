@@ -1,4 +1,5 @@
 <?php
+	session_start();
 	// 设置当前文档的格式
 	header('Content-type: image/png');
 	// 生成基础背景图（默认为黑色）
@@ -22,13 +23,15 @@
 		imagettftext($image, $fontsize, 0, $x, $y, $fontcolor, $fontfamily, $fontcontent);
 	}
 	*/
+	$captch_code = '';
 
-	// 生成随机字母和数字
+	// 生成4个随机字母和数字
 	for ($i=0; $i < 4; $i++) { 
 		$fontsize = 6;
 		$fontcolor = imagecolorallocate($image, rand(0, 120), rand(0, 120), rand(0, 120));
 		$data = 'abcdefghijkmnopqrstuvwxy3456789';
 		$fontcontent = substr($data, rand(0, strlen($data)),1);
+		$captch_code .= $fontcontent;
 
 		$x = ($i*100/4) +rand(5,10);
 		$y = rand(5, 10);
@@ -36,6 +39,7 @@
 		imagestring($image, $fontsize, $x, $y, $fontcontent, $fontcolor);
 	}
 
+	$_SESSION['authcode'] = $captch_code;
 	// 添加随机干扰点
 	for ($i=0; $i<200; $i++) {
 		// 设置干扰点的颜色
